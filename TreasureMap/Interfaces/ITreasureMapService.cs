@@ -8,6 +8,6 @@ namespace TreasureMap.Interfaces
 {
     internal interface ITreasureMapService
     {
-        public void play();
+        public void Play();
     }
 }

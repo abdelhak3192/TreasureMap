@@ -9,6 +9,6 @@ namespace TreasureMap.Interfaces
 {
     internal interface IImportDataService
     {
-        public MapDto importDataFromFile(string filePath);
+        public IList<Object> ImportDataFromFile(string filePath);
     }
 }

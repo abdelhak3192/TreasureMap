@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TreasureMap.Enums;
 
-namespace TreasureMap.Entities
+namespace TreasureMap.Dtos
 {
-    internal class AdventurerDto
+    internal class TreasureDto
     {
+        public int Id { get; set; }
         public string Name { get; set; }
-        public string Movements { get; set; }
-        public Direction Direction { get; set; }
+        public bool Found { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
     }

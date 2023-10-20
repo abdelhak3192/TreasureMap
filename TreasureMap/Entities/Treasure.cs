@@ -11,5 +11,8 @@ namespace TreasureMap.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public bool Found { get; set; }
+        public int x { get; set; }
+        public int y { get; set; }
+
     }
 }

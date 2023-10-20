@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TreasureMap.Interfaces
+namespace TreasureMap.Dtos
 {
-    internal interface IMovement
+    internal class MountainDto
     {
-        public int Move(int position);
+        public int X;
+        public int Y;
     }
 }

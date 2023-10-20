@@ -9,6 +9,10 @@ namespace TreasureMap.Dtos
 {
     internal class MapDto
     {
-        private readonly Cell[][] map;
+        private readonly CellDto[][] map;
+        public int Height;
+        public int Width;
+
+        
     }
 }

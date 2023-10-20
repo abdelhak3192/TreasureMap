@@ -1,18 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TreasureMap.Dtos;
+﻿using TreasureMap.Extensions;
 using TreasureMap.Interfaces;
 
 namespace TreasureMap.Services
 {
     internal class ImportDataService : IImportDataService
     {
-        public MapDto importDataFromFile(string filePath)
+        public IList<object> Imports { get; set; }
+
+        public ImportDataService()
         {
-            throw new NotImplementedException();
+            Imports = new List<object>();
+        }
+
+        public IList<object> ImportDataFromFile(string filePath)
+        {
+            try
+            {
+                using (var sr = new StreamReader(filePath))
+                {
+                    foreach (string line in File.ReadLines(filePath))
+                    {
+                        Imports.Add(line.CreateObjectFromString());
+                    }
+                }
+                return Imports;
+
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+                return null;
+            }
         }
     }
 }

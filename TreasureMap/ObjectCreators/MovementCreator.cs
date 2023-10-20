@@ -18,7 +18,7 @@ namespace TreasureMap.ObjectCreators
             // Call the factory method to create a Movement object.
             var movement = FactoryMethod();
 
-            return movement.move(position);
+            return movement.Move(position);
 
         }
     }

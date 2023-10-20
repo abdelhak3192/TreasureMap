@@ -8,6 +8,8 @@ namespace TreasureMap.Entities
 {
     internal sealed class Map
     {
+        public int Height;
+        public int Width;
         private readonly Cell[][] _map;
         private Map(Cell[][] map)
         {

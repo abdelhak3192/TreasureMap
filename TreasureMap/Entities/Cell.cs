@@ -31,13 +31,13 @@ namespace TreasureMap.Entities
 
         
 
-        public void setPosition(int x, int y)
+        public void SetPosition(int x, int y)
         {
             this.x = x;
             this.y = y;
         }
 
-        public bool hasMountains()
+        public bool HasMountains()
         {
             return isMountainous;
         }

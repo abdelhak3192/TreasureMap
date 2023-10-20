@@ -8,9 +8,9 @@ namespace TreasureMap.Enums
 {
     enum Direction
     {
-        North,
-        South,
-        West,
-        East,
+        North='N',
+        South='S',
+        West='W',
+        East='E',
     }
 }
