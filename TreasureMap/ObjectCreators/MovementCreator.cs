@@ -7,7 +7,7 @@ namespace TreasureMap.ObjectCreators
     internal abstract class MovementCreator : IMovementCreator
     {
         public abstract IMovement Create();
-        public (int, int) Move((int, int) position,Direction direction)
+        public (int, int,Direction) Move((int, int) position,Direction direction)
         {
             // Call the factory method to create a Movement object.
             var movement = Create();

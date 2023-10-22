@@ -18,6 +18,7 @@ namespace TreasureMap.Services
             {
                 using (var sr = new StreamReader(filePath))
                 {
+           
                     foreach (string line in File.ReadLines(filePath))
                     {
                         Imports.Add(line.CreateObjectFromString());

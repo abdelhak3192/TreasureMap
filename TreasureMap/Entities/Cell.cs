@@ -12,6 +12,7 @@ namespace TreasureMap.Entities
         public int Y { get; set; }
         public bool isMountainous  { get; set; } = false;
         public IList<Treasure> treasures { get; set; }  = new List<Treasure>();
+        public IList<Adventurer> Adventurers { get; set; } = new List<Adventurer>();
 
         public Cell(int x, int y)
         {

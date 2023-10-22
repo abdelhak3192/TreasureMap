@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using System.Threading;
 using TreasureMap.Dtos;
 using TreasureMap.Entities;
+using TreasureMap.Enums;
 using TreasureMap.Interfaces;
+using TreasureMap.ObjectCreators;
 using TreasureMap.ValueObjects;
 
 namespace TreasureMap.Services
@@ -10,22 +13,27 @@ namespace TreasureMap.Services
     {
         private readonly IImportDataService _importDataService;
         private readonly IMapper _mapper;
-        private readonly IEnumerable<IMovementCreator> _movementCreators;
+        private int _adventurerPrirority { get; set; } = 0;
+        private Map _treasureMap;
 
         public TreasureMapService(
             IImportDataService importDataService,
-            IMapper imapper,
-            IEnumerable<IMovementCreator> movementCreators)
+            IMapper imapper)
         {
             _importDataService = importDataService;
             _mapper = imapper;
-            _movementCreators = movementCreators;
         }
+
+        
         public void Play()
         {
             IList<object> dtos=_importDataService.ImportDataFromFile(Constants.TreasureFilePath);
             MapDto filledMapDto=FillMap(dtos);
-            Map treasureMap=_mapper.Map<Map>(filledMapDto);
+            _treasureMap=_mapper.Map<Map>(filledMapDto);
+            IList<Adventurer> allAdventurers = _treasureMap.Cells.Where(c => c.Adventurers != null && c.Adventurers.Any()).SelectMany(c => c.Adventurers).ToList();
+            CreateAdventurerMovementCreators(allAdventurers);
+            MoveAdventurers(allAdventurers);
+
             // Algorithme
 
         }
@@ -111,16 +119,72 @@ namespace TreasureMap.Services
             MapDto mapToFill=new MapDto();
             foreach (object obj in objects)
             {
-                Console.WriteLine(obj.GetType());
-                _mapToFillData.GetValueOrDefault(obj.GetType())?.Invoke(obj, mapToFill);
+                if (obj is AdventurerDto)
+                    ((AdventurerDto)obj).Prirority = _adventurerPrirority++;
+                _mapToFillData.GetValueOrDefault(obj.GetType())?.Invoke(obj, mapToFill);  
             }
 
             return mapToFill;
         }
-        //private void CreateAdventurerMovements(out Adventurer adventurer)
-        //{
+        private readonly Dictionary<char, MovementCreator> _movementsCreators = new Dictionary<char, MovementCreator>()
+        {
+            {'A', new SimpleAdvenceMovementCreator() },
+            {'D', new SimpleRightMovementCreator() } ,
+            {'G', new SimpleLeftMovementCreator() } ,
+        };
+        
+        private void CreateAdventurerMovementCreators(IList<Adventurer> adventurers)
+        {
+            foreach(Adventurer adventurer in adventurers)
+            {
+                adventurer.MovementCreators=new Queue<IMovementCreator>();
+                foreach (char mov in adventurer.Movements)
+                {
+                    adventurer.MovementCreators.Enqueue(_movementsCreators.GetValueOrDefault(mov));
+                }
+            }
+        }
 
-        //}
+        private SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+        private void MoveAdventurers(IList<Adventurer> adventurers)
+        {
+            Queue<Adventurer> adventurersQueue= new Queue<Adventurer>(adventurers.OrderBy(a => a.Prirority));
+            while (adventurersQueue.Count>0)
+            {
+                Adventurer adventurer=adventurersQueue.Dequeue();
+                _semaphore.Wait();
+                Console.WriteLine($"Moving adventurer {adventurer.Name}");
+                (int,int,Direction) position= adventurer.MovementCreators.Dequeue().Move((adventurer.X,adventurer.Y),adventurer.Direction);
+                if(IsMovementValid(position.Item1, position.Item2))
+                {
+                    ValidateMovement(position.Item1, position.Item2, position.Item3, adventurer);
+                    // Print the current position of the adventurer
+                    Console.WriteLine($"New position for {adventurer.Name}: ({adventurer.X},{adventurer.Y})");
+                }
+                if(adventurer.MovementCreators.Count > 0) 
+                    adventurersQueue.Enqueue(adventurer);
+                _semaphore.Release();
+            }
+        }
+        private bool IsMovementValid(int x,int y)
+        {
+
+            return x>0 && 
+                x<_treasureMap.Width && 
+                y>0 && 
+                y<_treasureMap.Height && 
+                !_treasureMap.Cells.Any(c=>c.isMountainous || c.Adventurers.Any());
+        }
+        
+        private void ValidateMovement(int x,int y,Direction direction,Adventurer adventurer)
+        {
+            _treasureMap.Cells.FirstOrDefault(c=>c.X==adventurer.X && c.Y==adventurer.Y).Adventurers.Remove(adventurer);
+            adventurer.X = x; adventurer.Y=y;
+            adventurer.Direction = direction;
+            _treasureMap.Cells.FirstOrDefault(c => c.X == y && c.Y == y).Adventurers.Add(adventurer);
+
+
+        }
         #endregion 
 
     }

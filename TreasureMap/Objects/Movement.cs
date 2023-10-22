@@ -12,7 +12,7 @@ namespace TreasureMap.Objects
     internal abstract class Movement : IMovement
     {
 
-        public abstract (int, int) Move((int, int) position, Direction direction);
+        public abstract (int, int,Direction) Move((int, int) position, Direction direction);
 
     }
 }

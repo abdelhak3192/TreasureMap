@@ -9,7 +9,7 @@ namespace TreasureMap.Interfaces
 {
     internal interface IMovementCreator
     {
-        public (int, int) Move((int, int) position, Direction direction);
+        public (int, int,Direction) Move((int, int) position, Direction direction);
         
     }
 }
