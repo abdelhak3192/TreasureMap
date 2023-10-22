@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using TreasureMap.Enums;
 using TreasureMap.Interfaces;
 
 namespace TreasureMap.ObjectCreators
 {
-    internal abstract class MovementCreator
+    internal abstract class MovementCreator : IMovementCreator
     {
-
-        public abstract IMovement FactoryMethod();
-
-
-        public int Move(int position)
+        public abstract IMovement Create();
+        public (int, int) Move((int, int) position,Direction direction)
         {
             // Call the factory method to create a Movement object.
-            var movement = FactoryMethod();
-
-            return movement.Move(position);
+            var movement = Create();
+            return movement.Move(position,direction);
 
         }
     }

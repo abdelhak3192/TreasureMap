@@ -10,23 +10,10 @@ namespace TreasureMap.Entities
     {
         public int Height;
         public int Width;
-        private readonly Cell[][] _map;
-        private Map(Cell[][] map)
-        {
-            this._map = map;
-        }
-
-        private static Map _instance;
+        public IList<Cell> Cells;
+        
 
 
-        public static Map GetInstance(Cell[][] map)
-        {
-            if (_instance == null)
-            {
-                _instance = new Map(map);
-            }
-            return _instance;
-        }
 
 
     }

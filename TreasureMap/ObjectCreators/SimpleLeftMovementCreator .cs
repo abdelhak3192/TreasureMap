@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TreasureMap.Entities;
 using TreasureMap.Interfaces;
+using TreasureMap.Objects;
 
 namespace TreasureMap.ObjectCreators
 {
-    internal class SimpleMovementCreator : MovementCreator
+    internal class SimpleLeftMovementCreator : MovementCreator,IMovementCreator
     {
 
-        public override IMovement FactoryMethod()
+        public override IMovement Create()
         {
-            return new SimpleMovement();
+            return new SimpleLeftMovement();
         }
     }
 }

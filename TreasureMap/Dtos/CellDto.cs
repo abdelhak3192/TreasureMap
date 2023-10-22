@@ -9,9 +9,11 @@ namespace TreasureMap.Dtos
 {
     internal class CellDto
     {
-        public int x;
-        public int y;
-        public bool isMountainous = false;
-        public IList<Treasure> treasures = new List<Treasure>();
+        public int X { get; set; }
+        public int Y { get; set; }
+        public bool IsMountainous { get; set; } = false;
+        public MountainDto ? Mountain{ get; set; }
+        public IList<TreasureDto> Treasures { get; set; } = new List<TreasureDto>();
+        public IList<AdventurerDto> Adventurers { get; set; } = new List<AdventurerDto>();
     }
 }

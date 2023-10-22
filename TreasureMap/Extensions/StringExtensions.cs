@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TreasureMap.Dtos;
 using TreasureMap.Entities;
 using TreasureMap.Enums;
+using TreasureMap.ValueObjects;
 
 namespace TreasureMap.Extensions
 {
@@ -16,39 +17,44 @@ namespace TreasureMap.Extensions
             {
             {'C', (line)=>  { return new MapDto()
                 {
-                    Height = line.GetDigitFromString(2),
-                    Width= line.GetDigitFromString(4)
+                    Height = line.GetDigitFromString(Constants.separator,1),
+                    Width= line.GetDigitFromString(Constants.separator,2)
                 };
             } 
             },
-            {'T', (line)=> { return Enumerable.Range(0, Convert.ToInt32(line.ToCharArray()[6]))
+            {'T', (line)=> { return Enumerable.Range(0,line.GetDigitFromString(Constants.separator,3))
                     .Select(i => new TreasureDto(){
-                        X= line.GetDigitFromString(2),
-                        Y= line.GetDigitFromString(4)
+                        X= line.GetDigitFromString(Constants.separator,2),
+                        Y= line.GetDigitFromString(Constants.separator,1)
                     } ).ToList(); } },
             {'M', (line)=> { return new MountainDto()
                 {
-                    X= line.GetDigitFromString(2),
-                    Y= line.GetDigitFromString(4)
+                    X= line.GetDigitFromString(Constants.separator,2),
+                    Y= line.GetDigitFromString(Constants.separator,1)
                 }; 
             } 
             },
             {'A', (line)=> { return new AdventurerDto()
                 {
-                    Name= line.GetSubStringFromString("-",1),
-                    Direction= (Direction) line.GetDigitFromString(4),
-                    X= line.GetDigitFromString(5),
-                    Y= line.GetDigitFromString(7),
-                    Movements= line.GetSubStringFromString("-",5)
+                    Name= line.GetSubStringFromString(Constants.separator,1),
+                    Direction= (Direction) line.GetCharFromString(Constants.separator,4),
+                    X= line.GetDigitFromString(Constants.separator,3),
+                    Y= line.GetDigitFromString(Constants.separator,2),
+                    Movements= line.GetSubStringFromString(Constants.separator,5)
                 }; 
             } 
             },
             {'#', (line)=> { return null; } }
             };
 
-        public static int GetDigitFromString(this String str,int index)
+        public static int GetDigitFromString(this String str, string separator, int index)
         {
-            return Convert.ToInt32(str.ToCharArray()[index]);
+            return Int32.Parse(str.Split(separator)[index]);
+        }
+
+        public static char GetCharFromString(this String str, string separator, int index)
+        {
+            return Char.Parse(str.Split(separator)[index]);
         }
 
         public static string GetSubStringFromString(this String str,string separator, int index)

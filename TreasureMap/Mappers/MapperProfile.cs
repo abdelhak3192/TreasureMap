@@ -8,6 +8,18 @@ namespace TreasureMap.Mappers
     {
         public MapperProfile()
         {
+
+            #region (TreasureDto) --> (Treasure)
+
+            CreateMap<TreasureDto, Treasure>();
+
+            #endregion
+
+            #region (MountainDto) --> (Mountain)
+
+            CreateMap<MountainDto, Mountain>();
+
+            #endregion
             #region (CellDto) --> (Cell)
 
             CreateMap<CellDto, Cell>();
@@ -20,6 +32,16 @@ namespace TreasureMap.Mappers
 
             #endregion
 
+            #region (MapDto) --> (Map)
+
+            CreateMap<MapDto, Map>();
+
+            #endregion
+
+
+
+
         }
+
     }
     }

@@ -9,7 +9,7 @@ namespace TreasureMap.Dtos
 {
     internal class MapDto
     {
-        private readonly CellDto[][] map;
+        public IList<CellDto> Cells;
         public int Height;
         public int Width;
 
