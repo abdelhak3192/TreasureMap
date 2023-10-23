@@ -4,3 +4,7 @@
 
 /UnitTest/bin/Debug/net7.0
 /UnitTest/obj
+/.vs
+/TreasureMap/.vs
+/TreasureMap/bin/Debug/net7.0
+/TreasureMap/obj
