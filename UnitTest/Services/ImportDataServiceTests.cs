@@ -1,11 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TreasureMap.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using TreasureMap.Interfaces;
 
 namespace TreasureMap.Services.Tests
 {
@@ -13,23 +9,49 @@ namespace TreasureMap.Services.Tests
     public class ImportDataServiceTests
     {
         private readonly IImportDataService _importDataService;
+        private readonly IList<object> _readList = new List<object>();
+
         ImportDataServiceTests() {
             var services = new ServiceCollection()
                   .AddLogging()
                   .AddScoped<IImportDataService>();
+            var serviceProvider = services.BuildServiceProvider();
+            _importDataService =serviceProvider.GetRequiredService<IImportDataService>();
 
         }
 
-        [TestMethod()]
-        public void TestImportDataFromFile_ShouldThrow()
+        [TestMethod(), ExpectedException(typeof(ArgumentNullException))]
+        [DataRow(null)]
+        public void TestImportDataFromFile_NullPath_ShouldThrow(string path)
         {
-            throw new NotImplementedException();
+            _importDataService.ImportDataFromFile(path);
+        }
+
+        [TestMethod(), ExpectedException(typeof(FileNotFoundException))]
+        [DataRow("/")]
+        public void TestImportDataFromFile_UnexistingPath_ShouldThrow(string path)
+        {
+            _importDataService.ImportDataFromFile(path);
         }
 
         [TestMethod()]
-        public void TestImportDataFromFile_ShouldReturnListofObjects()
+        [DataRow("C:\\Users\\a.benmazouza_adm\\source\\repos\\TreasureMap1\\TreasureMap\\TreasureMap.txt")]
+        public void TestImportDataFromFile_ExistingPath_ShouldReturnListofObjects(string path)
         {
-            Assert.Fail();
+            IList<object> objs=_importDataService.ImportDataFromFile(path);
+            Assert.IsNotNull(objs);
+            Assert.IsTrue(objs.Count>0);
+            
+        }
+
+        [TestMethod()]
+        [DataRow("C:\\Users\\a.benmazouza_adm\\source\\repos\\TreasureMap1\\TreasureMap\\TreasureMap.txt")]
+        public void TestImportDataFromFile_ExistingPath_ShouldReturnListofSameObjects(string path)
+        {
+            IList<object> objs = _importDataService.ImportDataFromFile(path);
+            
+                objs.Should().BeEquivalentTo(_readList);
+
         }
     }
 }
