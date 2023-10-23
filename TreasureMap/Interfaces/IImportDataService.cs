@@ -7,7 +7,7 @@ using TreasureMap.Dtos;
 
 namespace TreasureMap.Interfaces
 {
-    internal interface IImportDataService
+    public interface IImportDataService
     {
         public IList<Object> ImportDataFromFile(string filePath);
     }

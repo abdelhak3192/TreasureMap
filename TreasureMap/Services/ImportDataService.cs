@@ -3,7 +3,7 @@ using TreasureMap.Interfaces;
 
 namespace TreasureMap.Services
 {
-    internal class ImportDataService : IImportDataService
+    public class ImportDataService : IImportDataService
     {
         public IList<object> Imports { get; set; }
 
